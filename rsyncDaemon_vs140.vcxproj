@@ -110,7 +110,7 @@
     <TargetName Condition="'$(Configuration)|$(Platform)'=='release_static_mt|Win32'">RSFoundationmt</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug_shared|Win32'">
-    <OutDir>..\bin\</OutDir>
+    <OutDir>.\bin\</OutDir>
     <IntDir>obj\rsyncDaemon\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.exe</TargetExt>
@@ -160,7 +160,7 @@
       <OutputFile>..\bin\rsyncDaemond.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>..\bin\rsyncDaemond.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetFileName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>..\lib;..\lib\libpoco;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>
