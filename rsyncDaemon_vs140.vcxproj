@@ -116,7 +116,7 @@
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">
-    <OutDir>..\bin\</OutDir>
+    <OutDir>.\bin\</OutDir>
     <IntDir>obj\rsyncDaemon\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.exe</TargetExt>
@@ -157,10 +157,10 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>PocoFoundationd.lib;PocoJSONd.lib;PocoUtild.lib;Iphlpapi.lib;msi.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\bin\rsyncDaemond.exe</OutputFile>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)$(TargetFileName).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>..\lib;..\lib\libpoco;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
       <ImportLibrary>
@@ -168,9 +168,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y $(ProjectDir)rsyncDaemon.cmd $(OutDir)
-xcopy /y $(ProjectDir)rsyncDaemon.properties $(OutDir)
-xcopy /y $(ProjectDir)removedrsyncDaemon.cmd $(OutDir)</Command>
+      <Command>xcopy /y $(ProjectDir)rsyncDaemon.properties $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='release_shared|Win32'">
@@ -195,7 +193,7 @@ xcopy /y $(ProjectDir)removedrsyncDaemon.cmd $(OutDir)</Command>
     </ClCompile>
     <Link>
       <AdditionalDependencies>PocoFoundation.lib;PocoJSON.lib;PocoUtil.lib;ws2_32.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>..\bin\rsyncDaemon.exe</OutputFile>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\lib;..\lib\libpoco;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -207,9 +205,7 @@ xcopy /y $(ProjectDir)removedrsyncDaemon.cmd $(OutDir)</Command>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y $(ProjectDir)rsyncDaemon.cmd $(OutDir)
-xcopy /y $(ProjectDir)rsyncDaemon.properties $(OutDir)
-xcopy /y $(ProjectDir)removedrsyncDaemon.cmd $(OutDir)</Command>
+      <Command>xcopy /y $(ProjectDir)rsyncDaemon.properties $(OutDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug_static_mt|Win32'">
