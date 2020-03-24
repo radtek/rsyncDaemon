@@ -23,7 +23,12 @@ namespace Reach {
 		~UpdateTask();
 
 		void runTask();
+	protected:
+		void createProcessAsUser(const std::string & name, const std::string & initialDirectory);
 	private:
 		unsigned long millisecond;//millisecond - 1 mins
+		HANDLE hToken;
+		HANDLE hNewToken;
+		HANDLE handle;
 	};
 }
