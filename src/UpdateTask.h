@@ -26,7 +26,7 @@ namespace Reach {
 	protected:
 		void createProcessAsUser(const std::string & name, const std::string & initialDirectory);
 	private:
-		unsigned long millisecond;//millisecond - 1 mins
+		int period;
 		HANDLE hToken;
 		HANDLE hNewToken;
 		HANDLE handle;
