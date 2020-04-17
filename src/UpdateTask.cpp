@@ -67,7 +67,7 @@ void UpdateTask::runTask()
 		catch (Poco::Exception& exc)
 		{
 			app.logger().log(exc);
-			poco_information(app.logger(), "Exception is raised!");
+			poco_information_f1(app.logger(), "Last Error Code is %lx!", exc.code());
 		}
 	}
 }
