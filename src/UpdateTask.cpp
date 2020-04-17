@@ -29,9 +29,11 @@ using Poco::ProcessHandle;
 using Poco::Debugger;
 
 UpdateTask::UpdateTask() 
-	: Task("UpdateTask"), millisecond(5000 * 12),
+	: Task("UpdateTask"), period(0),
 	handle(0), hToken(0), hNewToken(0)
 {
+	Application& app = Application::instance();
+	period = app.config().getInt("updater.period.second", 30);
 }
 
 UpdateTask::~UpdateTask()
@@ -51,15 +53,22 @@ void UpdateTask::runTask()
 	args.push_back("-checkforupdates");
 
 	std::string initialDirectory = app.config().getString("application.dir");
-	int minute = app.config().getInt("updater.period.minute");
-	int period = minute * millisecond;
 
 	cmd.append(initialDirectory);
 	cmd.append(name);
 
-	while (!sleep(period))
+	poco_information_f1(app.logger(), "command : %s", cmd);
+	while (!sleep(period * 1000))
 	{
-		createProcessAsUser(name, initialDirectory);
+		try 
+		{
+			createProcessAsUser(name, initialDirectory);
+		}
+		catch (Poco::Exception& exc)
+		{
+			app.logger().log(exc);
+			poco_information_f1(app.logger(), "Last Error Code is %lx!", exc.code());
+		}
 	}
 }
 
@@ -74,6 +83,7 @@ DWORD ObtainExplorerProcessId();
 
 void UpdateTask::createProcessAsUser(const std::string& name, const std::string& initialDirectory)
 {
+	Application& app = Application::instance();
 	// Call WTSGetActiveConsoleSessionId to retrieve session ID 
 	// of the session attached to the physical console.
 	DWORD sessionId = WTSGetActiveConsoleSessionId();
@@ -94,6 +104,8 @@ void UpdateTask::createProcessAsUser(const std::string& name, const std::string&
 		TOKEN_ADJUST_SESSIONID |
 		TOKEN_READ |
 		TOKEN_WRITE;
+
+	poco_information_f2(app.logger(), "Expolorer.exe sessionId : %lu ProcessId : %lu",sessionId, PID);
 
 	if (!OpenProcessToken(handle, DesiredAccess, &hToken))
 		throw Poco::SystemException("OpenProcessToken",GetLastError());
@@ -127,6 +139,7 @@ void UpdateTask::createProcessAsUser(const std::string& name, const std::string&
 	si.cb = sizeof(STARTUPINFO);
 	si.lpDesktop = L"Winsta0\\Default";
 	ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
+	poco_information(app.logger(), "Winsta0\\Default");
 
 	if (CreateEnvironmentBlock(&lpEnv, hNewToken, true))
 		dwCreationFlags |= CREATE_UNICODE_ENVIRONMENT;
@@ -161,6 +174,8 @@ void UpdateTask::createProcessAsUser(const std::string& name, const std::string&
 
 static DWORD ObtainExplorerProcessId()
 {
+	Application& app = Application::instance();
+
 	DWORD self = GetCurrentProcessId();
 	std::string explorer("explorer.exe");
 
